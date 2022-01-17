@@ -16,18 +16,14 @@
 # export RELION_EXTERNAL_RECONSTRUCT_EXECUTABLE="python /path/to/relion_deepEMhancer_extRec.py"
 # export TF_FORCE_GPU_ALLOW_GROWTH='true'
 
-# In order to run deepEMhancer it is necessary to activate the conda environment. 
-# Therefore, the environment is activated from the script. 
-# If the script (and RELION) are running from scipion the variable CONDA_ACTIVATION_CMD must exist. 
-# If it is run outside of scipion, the variable needs to be set.
-# For example:
-# export CONDA_ACTIVATION_CMD=" eval "$(/home/user/miniconda3/condabin/conda shell.bash hook)" "
+# In order to run deepEMhancer it is necessary to activate 
+# the conda environment used in deepEMhancer installation. 
+
 
 
 import os
 import os.path
 import sys
-import argparse  
 import time
 import numpy as np
 import fcntl
@@ -43,9 +39,6 @@ def execute_external_relion(star):
     
 def execute_deep(sampling, dir, var, half): 
                
-#     params = 'eval "$(/home/erney/data/miniconda3/condabin/conda shell.bash hook)" && conda activate xmipp_deepEMhancer && ' 
-#     params = ' %s && conda activate xmipp_deepEMhancer && ' %CONDA_ACTIVATION_CMD
-#     params += ' xmipp_deep_volume_postprocessing'
     params = ' deepemhancer'
     params += ' --sampling_rate %f' %(sampling)  
     params += ' -i %s/relion_it%s_half%s_class001_external_reconstruct.mrc' %(dir, var, half)       
@@ -58,17 +51,12 @@ def execute_deep(sampling, dir, var, half):
 if __name__=="__main__":  
     paths = sys.argv 
     star = paths[1]
-    
-    gpu = 0
-#     gpu = os.environ['CUDA_VISIBLE_DEVICES'].split(',')[0]
-#     print('using gpu: %s' %gpu)
-    
-    if os.getenv('CONDA_ACTIVATION_CMD'):
-        CONDA_ACTIVATION_CMD=os.getenv('CONDA_ACTIVATION_CMD')
+
+    if os.getenv('CUDA_VISIBLE_DEVICES'): 
+        gpu = os.environ['CUDA_VISIBLE_DEVICES'].split(',')[0]   
     else:
-        print('ERROR---The environment variable CONDA_ACTIVATION_CMD must be defined.') 
-        print('For example: export CONDA_ACTIVATION_CMD=eval "$(/home/user/miniconda3/condabin/conda shell.bash hook)" ')    
-    
+        gpu = 0
+      
     dir=os.path.dirname(star)
 
     part = star.split('_')
