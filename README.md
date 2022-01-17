@@ -24,3 +24,6 @@ For information on the installation and use of deepEMhancer you can visit the pa
 
 `export TF_FORCE_GPU_ALLOW_GROWTH='true'`
 
+---
+* **EXAMPLE**
+
