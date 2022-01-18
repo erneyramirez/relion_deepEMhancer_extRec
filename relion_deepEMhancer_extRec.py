@@ -38,22 +38,29 @@ def execute_external_relion(star):
     os.system(params)     
     
 def execute_deep(sampling, dir, var, half): 
-               
-    params = ' deepemhancer'
-    params += ' --sampling_rate %f' %(sampling)  
+    print(CONDA_ENV)    
+    params = ' eval "$(conda shell.bash hook)" && conda activate %s && ' %CONDA_ENV     
+    params += ' deepemhancer '
+    params += ' -s %f' %(sampling)  
     params += ' -i %s/relion_it%s_half%s_class001_external_reconstruct.mrc' %(dir, var, half)       
     params += ' -o %s/relion_external_reconstruct_deep%s.mrc' %(dir, half) 
     params += ' -g %s -b 5' %gpu
-#     params += ' -p wideTarget'
+#     params += ' -p wideTarget' 
     os.system(params)
-   
+
     
 if __name__=="__main__":  
     paths = sys.argv 
     star = paths[1]
-
+    
+    if os.getenv('CONDA_ENV'):
+        CONDA_ENV=os.getenv('CONDA_ENV')
+    else:
+        print("Error with conda activation for deepEMhancer")
+    
     if os.getenv('CUDA_VISIBLE_DEVICES'): 
-        gpu = os.environ['CUDA_VISIBLE_DEVICES'].split(',')[0]   
+        gpu = os.environ['CUDA_VISIBLE_DEVICES'].split(',')[0] 
+        print("gpu usada es %s" %gpu)  
     else:
         gpu = 0
       
@@ -83,8 +90,8 @@ if __name__=="__main__":
               print("healpix = %s" %healpix)
     
     
-#     if iter_number < 1:
-    if (healpix < 4):
+    if iter_number < 1:
+#     if (healpix < 4):
          
         execute_external_relion(star)   
         time.sleep(5)
@@ -152,7 +159,7 @@ if __name__=="__main__":
                 emMap2 = f2.data.astype(np.float32).copy()   
                 
             max1_before =  emMap1.max()                  
-            max2_before =  emMap2.max()        
+            max2_before =  emMap2.max()       
             
             try:            
                 execute_deep(sampling, dir, var, '1')
@@ -163,6 +170,7 @@ if __name__=="__main__":
                 execute_deep(sampling, dir, var, '2')
             except:
                 pass
+            
 
             with mrcfile.open('%s/relion_external_reconstruct_deep1.mrc' %(dir)) as d1:
                 emDeep1 = d1.data.astype(np.float32).copy() 
