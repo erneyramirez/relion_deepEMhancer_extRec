@@ -11,11 +11,11 @@ For information on the installation and use of deepEMhancer you can visit the pa
 *It is assumed that the user already has deepEMhancer installed.*
 
 
- 1. Activate conda enviroment for deepEMhancer 
+ 1. Setting the environment variable CONDA_ENV to the conda enviroment created for deepEMhancer. This variable is used by the script to activate the deepEMhancer conda environment.   
  
- `conda activate deepEMhancer_env`
+ `export CONDA_ENV="deepEMhancer_env"`
    
- 2. Setting the environmental variable RELION_EXTERNAL_RECONSTRUCT_EXECUTABLE to the command that executes the script.
+ 2. Setting the environment variable RELION_EXTERNAL_RECONSTRUCT_EXECUTABLE to the command that executes the script.
 
 `export RELION_EXTERNAL_RECONSTRUCT_EXECUTABLE="python /path/to/relion_deepEMhancer_extRec.py"`
 
@@ -28,11 +28,11 @@ For information on the installation and use of deepEMhancer you can visit the pa
 `export TF_FORCE_GPU_ALLOW_GROWTH='true'`
 
 ---
-* **EXAMPLE**
+* **Example**
  
 ```
 wget https://github.com/erneyramirez/relion_deepEMhancer_extRec/blob/master/relion_deepEMhancer_extRec.py
-conda activate deepEMhancer_env
+export CONDA_ENV="deepEMhancer_env"
 export RELION_EXTERNAL_RECONSTRUCT_EXECUTABLE="python /path/to/relion_deepEMhancer_extRec.py"
 export CUDA_VISIBLE_DEVICES=0
 export TF_FORCE_GPU_ALLOW_GROWTH='true'
