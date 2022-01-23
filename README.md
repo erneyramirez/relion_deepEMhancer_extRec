@@ -11,7 +11,7 @@ For information on the installation and use of deepEMhancer you can visit the pa
 *It is assumed that the user already has deepEMhancer installed.*
 
 
- 1. Setting the environment variable CONDA_ENV to the conda enviroment created for deepEMhancer. This variable is used by the script to activate the deepEMhancer conda environment. Users using deepEMhancer through scipion, must use the environment variable `XMIPP_deepEMhancer`.   
+ 1. Setting the environment variable CONDA_ENV to the conda enviroment created for deepEMhancer. This variable is used by the script to activate the deepEMhancer conda environment. Users using deepEMhancer through Scipion, must use the environment variable `XMIPP_deepEMhancer`.   
  
  `export CONDA_ENV="deepEMhancer_env"`
  
