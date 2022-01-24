@@ -90,8 +90,8 @@ if __name__=="__main__":
               print("healpix = %s" %healpix)
     
     
-    if iter_number < 1:
-#     if (healpix < 4):
+#     if iter_number < 1:
+    if (healpix < 4):
          
         execute_external_relion(star)   
         time.sleep(5)
@@ -122,17 +122,6 @@ if __name__=="__main__":
             pass        
           
         execute_external_relion(star)   
-        
-#                     #semaforo
-#         x = open('foo', 'w+')
-# 
-#         try:
-#             fcntl.flock(x, fcntl.LOCK_EX | fcntl.LOCK_NB)  
-#         except IOError as e:
-#             if x:
-#                 x.close() 
-#             raise 
-         
                    
         for i in range (1,15):
             mrc1 = os.path.isfile('%s/relion_it%s_half1_class001_external_reconstruct.mrc' %(dir, var))  
@@ -159,12 +148,14 @@ if __name__=="__main__":
                 emMap2 = f2.data.astype(np.float32).copy()   
                 
             max1_before =  emMap1.max()                  
-            max2_before =  emMap2.max()       
+            max2_before =  emMap2.max()  
+              
             
             try:            
                 execute_deep(sampling, dir, var, '1')
             except:
                 pass
+
             
             try:
                 execute_deep(sampling, dir, var, '2')
