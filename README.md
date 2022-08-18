@@ -10,8 +10,9 @@ For information on the installation and use of deepEMhancer you can visit the pa
 
 *It is assumed that the user already has deepEMhancer installed.*
 
-1. Users who do not use SCIPION should make sure that the RELION executables ('/path/relion-3.1.0/bin') are in the path in the /home/usr/.bashrc file.
+1. Users who do not use SCIPION should make sure that the RELION executables (/path/relion-3.1.0/bin) are in the path in the /home/usr/.bashrc file; or otherwise pass them via command line.
 
+`export PATH=/path/relion-3.1.0/bin:$PATH`
 
 2. Setting the environment variable CONDA_ENV to the conda enviroment created for deepEMhancer. This variable is used by the script to activate the deepEMhancer conda environment. Users using deepEMhancer through Scipion, must use the environment variable `xmipp_deepEMhancer`.   
  
