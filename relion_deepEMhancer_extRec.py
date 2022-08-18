@@ -103,7 +103,7 @@ if __name__=="__main__":
             for line in f.readlines():
                 if "opticsGroup1" in line:
                     sampling = float(line.split()[8])
-                    print("sampling = %s" %sampling)
+                    #print("sampling = %s" %sampling)
         
         
         try:        
