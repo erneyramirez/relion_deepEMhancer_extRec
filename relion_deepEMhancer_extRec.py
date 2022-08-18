@@ -20,15 +20,15 @@
 # the conda environment used in deepEMhancer installation. 
 
 
-
 import os
 import os.path
+import re
 import sys
 import time
 import numpy as np
-import fcntl
-import errno
 import mrcfile
+# import fcntl
+# import errno
 
 
 def execute_external_relion(star):
@@ -37,12 +37,12 @@ def execute_external_relion(star):
     params += ' %s' %star
     os.system(params)     
     
-def execute_deep(sampling, dir, var, half): 
+def execute_deep(sampling, dir, basename, var, half): 
     print(CONDA_ENV)    
     params = ' eval "$(conda shell.bash hook)" && conda activate %s && ' %CONDA_ENV     
     params += ' deepemhancer '
     params += ' -s %f' %(sampling)  
-    params += ' -i %s/relion_it%s_half%s_class001_external_reconstruct.mrc' %(dir, var, half)       
+    params += ' -i %s/%s_it%s_half%s_class001_external_reconstruct.mrc' %(dir, basename, var, half)       
     params += ' -o %s/relion_external_reconstruct_deep%s.mrc' %(dir, half) 
     params += ' -g %s -b 5' %gpu
 #     params += ' -p wideTarget' 
@@ -60,14 +60,15 @@ if __name__=="__main__":
     
     if os.getenv('CUDA_VISIBLE_DEVICES'): 
         gpu = os.environ['CUDA_VISIBLE_DEVICES'].split(',')[0] 
-        print("gpu usada es %s" %gpu)  
+        print("gpu = %s" %gpu)  
     else:
         gpu = 0
       
     dir=os.path.dirname(star)
 
-    part = star.split('_')
-    iter_string = part[2]
+    part = re.split('/|_', star)
+    iter_string = part[-5]
+    basename = part[-6]
     iter_number = int(iter_string[2:5])
     
     #We assume iter < 100   
@@ -83,14 +84,14 @@ if __name__=="__main__":
         beforeVar = '0%d' %(iter_number-1)
 
     
-    with open("%s/relion_it%s_sampling.star" %(dir, beforeVar)) as file:
+    with open("%s/%s_it%s_sampling.star" %(dir,basename,beforeVar)) as file:
         for li in file.readlines():
            if "rlnHealpixOrder " in li: 
               healpix = int(li.split()[1]) 
               print("healpix = %s" %healpix)
     
     
-#     if iter_number < 1:
+    # if iter_number < 1:
     if (healpix < 4):
          
         execute_external_relion(star)   
@@ -98,7 +99,7 @@ if __name__=="__main__":
            
     else:         
             ###sampling of the images            
-        with open("%s/relion_it%s_data.star" %(dir, beforeVar)) as f:
+        with open("%s/%s_it%s_data.star" %(dir,basename,beforeVar)) as f:
             for line in f.readlines():
                 if "opticsGroup1" in line:
                     sampling = float(line.split()[8])
@@ -124,27 +125,27 @@ if __name__=="__main__":
         execute_external_relion(star)   
                    
         for i in range (1,15):
-            mrc1 = os.path.isfile('%s/relion_it%s_half1_class001_external_reconstruct.mrc' %(dir, var))  
+            mrc1 = os.path.isfile('%s/%s_it%s_half1_class001_external_reconstruct.mrc' %(dir,basename,var))  
             if mrc1 is True:
                 break
             else:
                 time.sleep(30)
                 
         for i in range (1,15):
-            mrc2 = os.path.isfile('%s/relion_it%s_half2_class001_external_reconstruct.mrc' %(dir, var))  
+            mrc2 = os.path.isfile('%s/%s_it%s_half2_class001_external_reconstruct.mrc' %(dir,basename,var))  
             if mrc2 is True:
                 break
             else:
                 time.sleep(30)
 
-        check=os.path.isfile('%s/relion_it%s_half1_class001_external_reconstruct.mrc' %(dir, var))        
+        check=os.path.isfile('%s/%s_it%s_half1_class001_external_reconstruct.mrc' %(dir,basename,var))        
         
         if check is True:                
         
             #open mrcfile
-            with mrcfile.open('%s/relion_it%s_half1_class001_external_reconstruct.mrc' %(dir, var)) as f1:
+            with mrcfile.open('%s/%s_it%s_half1_class001_external_reconstruct.mrc' %(dir,basename,var)) as f1:
                 emMap1 = f1.data.astype(np.float32).copy()  
-            with mrcfile.open('%s/relion_it%s_half2_class001_external_reconstruct.mrc' %(dir, var)) as f2:
+            with mrcfile.open('%s/%s_it%s_half2_class001_external_reconstruct.mrc' %(dir,basename,var)) as f2:
                 emMap2 = f2.data.astype(np.float32).copy()   
                 
             max1_before =  emMap1.max()                  
@@ -152,13 +153,13 @@ if __name__=="__main__":
               
             
             try:            
-                execute_deep(sampling, dir, var, '1')
+                execute_deep(sampling, dir, basename, var, '1')
             except:
                 pass
 
             
             try:
-                execute_deep(sampling, dir, var, '2')
+                execute_deep(sampling, dir, basename, var, '2')
             except:
                 pass
             
@@ -178,11 +179,9 @@ if __name__=="__main__":
             finalMap2 = emDeep2/factor2
             
             #save mrcfile
-            with mrcfile.new('%s/relion_it%s_half1_class001_external_reconstruct.mrc' %(dir, var) , overwrite=True) as fMap1:
+            with mrcfile.new('%s/%s_it%s_half1_class001_external_reconstruct.mrc' %(dir,basename,var) , overwrite=True) as fMap1:
                 fMap1.set_data(finalMap1.astype(np.float32))
                 fMap1.voxel_size = tuple([sampling]*3)
-            with mrcfile.new('%s/relion_it%s_half2_class001_external_reconstruct.mrc' %(dir, var) , overwrite=True) as fMap2:
+            with mrcfile.new('%s/%s_it%s_half2_class001_external_reconstruct.mrc' %(dir,basename,var) , overwrite=True) as fMap2:
                 fMap2.set_data(finalMap2.astype(np.float32))
                 fMap2.voxel_size = tuple([sampling]*3)
-
-        
