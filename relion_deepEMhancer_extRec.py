@@ -185,3 +185,5 @@ if __name__=="__main__":
             with mrcfile.new('%s/%s_it%s_half2_class001_external_reconstruct.mrc' %(dir,basename,var) , overwrite=True) as fMap2:
                 fMap2.set_data(finalMap2.astype(np.float32))
                 fMap2.voxel_size = tuple([sampling]*3)
+                
+                
