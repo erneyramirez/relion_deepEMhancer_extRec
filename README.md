@@ -10,22 +10,24 @@ For information on the installation and use of deepEMhancer you can visit the pa
 
 *It is assumed that the user already has deepEMhancer installed.*
 
+1. Users who do not use SCIPION should make sure that the RELION executables ('/path/relion-3.1.0/bin') are in the path in the /home/usr/.bashrc file.
 
- 1. Setting the environment variable CONDA_ENV to the conda enviroment created for deepEMhancer. This variable is used by the script to activate the deepEMhancer conda environment. Users using deepEMhancer through Scipion, must use the environment variable `xmipp_deepEMhancer`.   
+
+2. Setting the environment variable CONDA_ENV to the conda enviroment created for deepEMhancer. This variable is used by the script to activate the deepEMhancer conda environment. Users using deepEMhancer through Scipion, must use the environment variable `xmipp_deepEMhancer`.   
  
  `export CONDA_ENV="deepEMhancer_env"`
  
  `export CONDA_ENV="xmipp_deepEMhancer"`  for Scipion users.
    
- 2. Setting the environment variable RELION_EXTERNAL_RECONSTRUCT_EXECUTABLE to the command that executes the script.
+3. Setting the environment variable RELION_EXTERNAL_RECONSTRUCT_EXECUTABLE to the command that executes the script.
 
 `export RELION_EXTERNAL_RECONSTRUCT_EXECUTABLE="python /path/to/relion_deepEMhancer_extRec.py"`
 
-3. Set the CUDA_VISIBLE_DEVICES environment variable to the gpu to be used. It is recommended that it is the same one used in relion. If this variable does not appear, GPU 0 will be used.
+4. Set the CUDA_VISIBLE_DEVICES environment variable to the gpu to be used. It is recommended that it is the same one used in relion. If this variable does not appear, GPU 0 will be used.
 
 `export CUDA_VISIBLE_DEVICES=0`
 
-4. In some cases, it is recommended to set dynamic GPU allocation using the environment variable TF_FORCE_GPU_ALLOW_GROWTH='true'
+5. In some cases, it is recommended to set dynamic GPU allocation using the environment variable TF_FORCE_GPU_ALLOW_GROWTH='true'
 
 `export TF_FORCE_GPU_ALLOW_GROWTH='true'`
 
