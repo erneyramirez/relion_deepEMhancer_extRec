@@ -36,7 +36,7 @@ For information on the installation and use of deepEMhancer you can visit the pa
 * **Example**
  
 ```
-wget https://github.com/erneyramirez/relion_deepEMhancer_extRec/blob/master/relion_deepEMhancer_extRec.py
+git clone https://github.com/erneyramirez/relion_deepEMhancer_extRec.git
 export PATH=/path/relion-3.1.0/bin:$PATH
 export CONDA_ENV="deepEMhancer_env"
 export RELION_EXTERNAL_RECONSTRUCT_EXECUTABLE="python /path/to/relion_deepEMhancer_extRec.py"
