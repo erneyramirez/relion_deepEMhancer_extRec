@@ -22,7 +22,6 @@
 
 import os
 import os.path
-import re
 import sys
 import time
 import numpy as np
@@ -66,10 +65,11 @@ if __name__=="__main__":
       
     dir=os.path.dirname(star)
 
-    part = re.split('/|_', star)
-    iter_string = part[-5]
-    basename = part[-6]
+    part = star.split('/')[-1].split('_')
+    iter_string = part[1]
+    basename = part[0]
     iter_number = int(iter_string[2:5])
+    print("iter =", iter_number)
     
     #We assume iter < 100   
         
